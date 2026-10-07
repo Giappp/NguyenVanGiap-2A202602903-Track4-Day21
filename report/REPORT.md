@@ -8,7 +8,7 @@
 - **Link repo:** https://github.com/Giappp/NguyenVanGiap-2A202602903-Track4-Day21
 - **Topic:** A - LiDAR-camera projection QA
 - **Dataset:** data/kitti_mini
-- **Các frame đã dùng:** [ĐIỀN danh sách frame id, ví dụ 000011, 000049 hoặc scene-0103_010]
+- **Các frame đã dùng:** 000008, 000011, 000049
 
 > Hãy viết ngắn: mỗi mục từ 3 đến 8 dòng, ưu tiên số liệu và hình ảnh.
 
