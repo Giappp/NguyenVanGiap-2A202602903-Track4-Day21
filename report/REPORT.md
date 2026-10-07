@@ -40,9 +40,9 @@ CSV: `results/yaw_perturb_sweep.csv`; biểu đồ: `results/figures/yaw_sweep.p
 
 Nêu khi nào hệ thống hoặc phương pháp fail, vì sao fail, và liên hệ tới lớp nào trong 6 lớp debug: I/O, Geometry, Time, Preprocess, Model, Metric.
 
-![failure](../results/figures/fail_[ĐIỀN].png)
+Ở frame `000011`, yaw drift `+3°` làm tỷ lệ điểm LiDAR thuộc vật thể nằm trong 2D box giảm từ `99.45%` (yaw `0°`) xuống `21.23%`; số điểm vật thể còn trong ảnh giảm từ 725 xuống 537. Điểm trong ảnh tổng thể gần như không đổi (19,946 → 19,948), nên lỗi chủ yếu là điểm trên vật thể bị chiếu lệch khỏi box, không phải mất toàn bộ điểm khỏi FOV. Đây là failure có chủ ý do **Geometry**: extrinsic sai trong khi box nhãn giữ nguyên. Số liệu chi tiết nằm ở `results/yaw_perturb_sweep.csv`.
 
-[ĐIỀN]
+![So sánh baseline và yaw drift 3 độ ở frame 000011](../results/figures/fail_02_yaw_3deg_000011.png)
 
 ## 4. Khuyến nghị nếu triển khai thật
 
@@ -64,4 +64,4 @@ Ghi rõ đã dùng công cụ AI nào, dùng vào việc gì, và bạn đã t�
 
 | Công cụ | Dùng cho việc gì | Bạn đã kiểm chứng thế nào |
 |---|---|---|
-| [ĐIỀN] | | |
+| ChatGPT | Tìm hiểu công thức, code mẫu triển khai | chạy pytest và đọc tài liệu do chatgpt cung cấp để kiểm chứng sự thật |
