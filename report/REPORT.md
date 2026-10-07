@@ -16,17 +16,25 @@
 
 Một câu khẳng định kỹ thuật có thể kiểm chứng. Ví dụ: *"Lệch yaw 1° làm 12% điểm LiDAR rơi ra khỏi vật thể ở 30 m, phát hiện được bằng edge-alignment score với ngưỡng X."*
 
-[ĐIỀN]
+Trên ba frame KITTI `000008`, `000011`, `000049`, yaw drift tăng từ 0° lên 3° làm tỷ lệ trung bình theo frame của điểm LiDAR thuộc vật thể nằm trong 2D box giảm từ 99.44% xuống 62.18%; frame `000011` giảm còn 21.23%.
 
 ## 2. Evidence
 
 Bảng hoặc plot số liệu, kèm ảnh/video demo. Ghi rõ đường dẫn file trong `results/`.
 
-| Cấu hình / mức perturb | Metric 1 | Metric 2 | Ghi chú |
+| Yaw drift | Điểm vật thể trong 2D box, trung bình 3 frame | Thấp nhất theo frame | Ghi chú |
 |---|---|---|---|
-| [ĐIỀN] | | | |
+| 0° | 99.44% | 99.25% | Baseline |
+| 0.5° | 96.30% | 91.88% | Bắt đầu giảm ở frame `000011` |
+| 1° | 89.85% | 77.44% | Khác biệt giữa các frame rõ hơn |
+| 2° | 75.00% | 45.44% | Frame `000011` giảm mạnh |
+| 3° | 62.18% | 21.23% | Frame `000011` là trường hợp nhạy nhất |
 
-![demo](../results/figures/[ĐIỀN].png)
+Metric là tỷ lệ trong các điểm thuộc 3D box GT và còn được chiếu vào ảnh, có pixel nằm trong 2D box GT. Giá trị trung bình là macro average trên ba frame; CSV lưu từng frame. Số điểm trong ảnh lần lượt khoảng 17.2–20.0 nghìn/frame và thay đổi ít theo sweep.
+
+CSV: `results/yaw_perturb_sweep.csv`; biểu đồ: `results/figures/yaw_sweep.png`.
+
+![yaw sweep](../results/figures/yaw_sweep.png)
 
 ## 3. Failure case
 
