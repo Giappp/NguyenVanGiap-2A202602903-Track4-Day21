@@ -6,8 +6,8 @@
 - **MSSV:** 2A202602903
 - **Lớp:** AI20K-T4
 - **Link repo:** https://github.com/Giappp/NguyenVanGiap-2A202602903-Track4-Day21
-- **Topic:** [ĐIỀN một chữ cái A/B/C/D/E/F] — [ĐIỀN tên topic]
-- **Dataset:** [ĐIỀN một hoặc nhiều trong: data/synthetic, data/kitti_mini, data/nuscenes_mini_subset, log riêng]
+- **Topic:** A - LiDAR-camera projection QA
+- **Dataset:** data/kitti_mini
 - **Các frame đã dùng:** [ĐIỀN danh sách frame id, ví dụ 000011, 000049 hoặc scene-0103_010]
 
 > Hãy viết ngắn: mỗi mục từ 3 đến 8 dòng, ưu tiên số liệu và hình ảnh.
