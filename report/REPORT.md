@@ -1,6 +1,4 @@
-# Báo cáo Day 6: [ĐIỀN tên đề tài ngắn]
-
-> Thay **mọi** ô có chữ ĐIỀN nằm trong ngoặc vuông bằng nội dung của bạn, xoá luôn cả dấu ngoặc vuông. Lệnh `python tools/check_submission.py` sẽ báo FAIL nếu còn sót bất kỳ chỗ nào.
+# Báo cáo Day 6: Kiểm tra calibration LiDAR-camera bằng projection
 
 - **Họ tên:** Nguyễn Văn Giáp
 - **MSSV:** 2A202602903
@@ -10,17 +8,11 @@
 - **Dataset:** data/kitti_mini
 - **Các frame đã dùng:** 000008, 000011, 000049
 
-> Hãy viết ngắn: mỗi mục từ 3 đến 8 dòng, ưu tiên số liệu và hình ảnh.
-
 ## 1. Claim
-
-Một câu khẳng định kỹ thuật có thể kiểm chứng. Ví dụ: *"Lệch yaw 1° làm 12% điểm LiDAR rơi ra khỏi vật thể ở 30 m, phát hiện được bằng edge-alignment score với ngưỡng X."*
 
 Trên ba frame KITTI `000008`, `000011`, `000049`, yaw drift tăng từ 0° lên 3° làm tỷ lệ trung bình theo frame của điểm LiDAR thuộc vật thể nằm trong 2D box giảm từ 99.44% xuống 62.18%; frame `000011` giảm còn 21.23%.
 
 ## 2. Evidence
-
-Bảng hoặc plot số liệu, kèm ảnh/video demo. Ghi rõ đường dẫn file trong `results/`.
 
 | Yaw drift | Điểm vật thể trong 2D box, trung bình 3 frame | Thấp nhất theo frame | Ghi chú |
 |---|---|---|---|
@@ -38,30 +30,30 @@ CSV: `results/yaw_perturb_sweep.csv`; biểu đồ: `results/figures/yaw_sweep.p
 
 ## 3. Failure case
 
-Nêu khi nào hệ thống hoặc phương pháp fail, vì sao fail, và liên hệ tới lớp nào trong 6 lớp debug: I/O, Geometry, Time, Preprocess, Model, Metric.
-
 Ở frame `000011`, yaw drift `+3°` làm tỷ lệ điểm LiDAR thuộc vật thể nằm trong 2D box giảm từ `99.45%` (yaw `0°`) xuống `21.23%`; số điểm vật thể còn trong ảnh giảm từ 725 xuống 537. Điểm trong ảnh tổng thể gần như không đổi (19,946 → 19,948), nên lỗi chủ yếu là điểm trên vật thể bị chiếu lệch khỏi box, không phải mất toàn bộ điểm khỏi FOV. Đây là failure có chủ ý do **Geometry**: extrinsic sai trong khi box nhãn giữ nguyên. Số liệu chi tiết nằm ở `results/yaw_perturb_sweep.csv`.
 
 ![So sánh baseline và yaw drift 3 độ ở frame 000011](../results/figures/fail_02_yaw_3deg_000011.png)
 
 ## 4. Khuyến nghị nếu triển khai thật
 
-Use-case cụ thể (ADAS / robot / drone), trade-off và bước tiếp theo.
-
-[ĐIỀN]
+Với ADAS, theo dõi tỷ lệ điểm LiDAR trên vật thể nằm trong box camera qua nhiều frame liên tiếp để phát hiện bracket cảm biến bị xê dịch; cảnh báo và yêu cầu kiểm tra calibration khi score giảm bền vững. Cách đo này rẻ, chạy CPU và dễ trực quan hoá, nhưng nhạy với box nhãn, occlusion và loại vật thể. Trước khi đưa vào xe thật, cần hiệu chỉnh ngưỡng trên nhiều tuyến đường, khoảng cách và điều kiện ánh sáng; không tự động cập nhật extrinsic chỉ từ một frame.
 
 ## 5. Cách chạy lại
 
-Các lệnh tái tạo lại toàn bộ kết quả từ repo sạch.
-
 ```bash
-[ĐIỀN]
+python -m pip install -r requirements.txt
+python -m src.test_projection
+python -m src.exp_yaw_sweep --data-root data/kitti_mini --frames 000008 000011 000049
+python -m src.plot_yaw_sweep
+python -m starter.projection --data-root data/kitti_mini --frame 000011 --out-dir results/figures
+python -m starter.projection --data-root data/kitti_mini --frame 000011 --yaw-deg 3 --out-dir results/figures
+python -m src.make_failure_comparison
 ```
+
+Các lệnh chạy từ thư mục gốc repo trong môi trường Python đã cài dependencies. Lệnh sweep tạo CSV; lệnh vẽ tạo biểu đồ và ảnh so sánh failure.
 
 ## 6. Khai báo sử dụng AI
 
-Ghi rõ đã dùng công cụ AI nào, dùng vào việc gì, và bạn đã tự kiểm chứng kết quả đó bằng cách nào. Nếu không dùng AI, ghi "Không sử dụng". Xem quy định ở `RULES.md` mục 2.
-
 | Công cụ | Dùng cho việc gì | Bạn đã kiểm chứng thế nào |
 |---|---|---|
-| ChatGPT | Tìm hiểu công thức, code mẫu triển khai | chạy pytest và đọc tài liệu do chatgpt cung cấp để kiểm chứng sự thật |
+| ChatGPT/Codex | Hỗ trợ giải thích phép biến đổi, rà soát projection, xây dựng thí nghiệm và biên tập báo cáo | Đối chiếu công thức với case kiểm tra `(10, 0, 0)` trong `src/test_projection.py`, so sánh metric với CSV 3 frame KITTI và kiểm tra overlay baseline/failure |
